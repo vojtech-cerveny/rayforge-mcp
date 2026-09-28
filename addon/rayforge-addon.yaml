@@ -4,7 +4,7 @@ description: "Local socket server that lets an MCP client edit the open document
 version: "0.1.0"
 api_version: 21
 author:
-  name: "Vojtech Cervik"
+  name: "Vojtech Cerveny"
   email: "cervik49@gmail.com"
 provides:
   frontend: "mcp_bridge.frontend"
