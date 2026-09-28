@@ -19,7 +19,11 @@ from gi.repository import GLib
 from rayforge.core.step_registry import step_registry
 from rayforge.core.undo import Command
 from rayforge.core.undo.list_cmd import ListItemCommand
-from rayforge.core.vectorization_spec import PassthroughSpec, TraceSpec
+from rayforge.core.vectorization_spec import (
+    LayerImportMode,
+    PassthroughSpec,
+    TraceSpec,
+)
 from rayforge.core.layer import Layer
 from rayforge.core.workpiece import WorkPiece
 
@@ -263,9 +267,21 @@ class Handlers:
         if not path.is_file():
             raise FileNotFoundError(str(path))
         mode = params.get("mode", "auto")
+        if mode == "auto" and path.suffix.lower() == ".svg":
+            # The SVG importer treats a missing spec as a default
+            # PassthroughSpec, so take the vector path explicitly to get
+            # the fixes below.
+            mode = "vector"
+        # FLATTEN keeps every imported item on the target layer. The
+        # default MAP_TO_EXISTING puts SVG layer N on document layer N,
+        # which ignores layer_uid. trim_padding=0 keeps the item bounds
+        # equal to the drawing: the default pads 1% of the longer side on
+        # every edge, so a 215 mm drawing came in as 219.3 mm.
         spec = {
             "auto": None,
-            "vector": PassthroughSpec(),
+            "vector": PassthroughSpec(
+                layer_import_mode=LayerImportMode.FLATTEN, trim_padding=0
+            ),
             "trace": TraceSpec(),
         }[mode]
         mime, _ = mimetypes.guess_type(path)
