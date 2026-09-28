@@ -61,3 +61,7 @@ mm/min.
 
 The socket binds to localhost only, but any local process can connect to it
 and edit the open document. It cannot reach the machine driver.
+
+## License
+
+MIT, same as Rayforge. See [LICENSE](LICENSE).

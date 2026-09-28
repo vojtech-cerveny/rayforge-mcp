@@ -3,6 +3,7 @@ name = "rayforge-mcp"
 version = "0.1.0"
 description = "MCP server that drives a running Rayforge through the mcp_bridge addon"
 requires-python = ">=3.10"
+license = {text = "MIT"}
 dependencies = ["mcp>=1.2,<2"]
 
 [project.scripts]
